@@ -1,5 +1,5 @@
 // Package logger provides ...
-package logger
+package zero
 
 import (
 	"context"
