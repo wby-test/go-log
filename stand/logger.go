@@ -2,8 +2,7 @@ package stand
 
 import (
 	"context"
-	"os"
-	"time"
+	"io"
 
 	"golang.org/x/exp/slog"
 )
@@ -17,7 +16,7 @@ type Stand struct {
 	logger *slog.Logger
 }
 
-func NewStandLogger(level slog.Level) *Stand {
+func NewStandLogger(level slog.Level, w io.Writer) *Stand {
 	// 替换掉 msg =
 	opts := slog.HandlerOptions{
 		AddSource: false,
@@ -27,18 +26,18 @@ func NewStandLogger(level slog.Level) *Stand {
 				return slog.Attr{}
 			}
 
-			if a.Key == slog.TimeKey {
-				return slog.Attr{
-					Key:   slog.TimeKey,
-					Value: slog.StringValue(time.Now().Format("2006-01-02 15:04:05")),
-				}
-			}
+			//if a.Key == slog.TimeKey {
+			//	return slog.Attr{
+			//		Key:   slog.TimeKey,
+			//		Value: slog.StringValue(time.Now().Format("2006-01-02 15:04:05")),
+			//	}
+			//}
 
 			return a
 		},
 	}
 
-	textHandler := opts.NewTextHandler(os.Stdout)
+	textHandler := opts.NewTextHandler(w)
 	logger := slog.New(textHandler)
 
 	return &Stand{
